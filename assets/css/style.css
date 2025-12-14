@@ -8,3 +8,15 @@ body{
     linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
     url("assets/images/bg-frenchconnect-1920.webp") center / cover no-repeat fixed !important;
 }
+/* === BACKGROUND GLOBAL FINAL (force) === */
+html, body{ min-height:100%; }
+
+html{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.65)),
+    url("assets/images/bg-frenchconnect-1920.webp") center/cover no-repeat fixed !important;
+}
+
+body{
+  background: transparent !important; /* on laisse voir l'image du <html> */
+}
