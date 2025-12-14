@@ -82,11 +82,4 @@ footer {
   font-size: 14px;
 }
 
-@keyframes bgMove {
-  0% {
-    background-position: center top;
-  }
-  100% {
-    background-position: center bottom;
-  }
-}
+
