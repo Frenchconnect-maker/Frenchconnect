@@ -24,14 +24,17 @@ html{
     center/cover no-repeat fixed;
 }
 
-}
-
 body{
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--ink);
   background: transparent;
   line-height:1.55;
 }
+
+/* --- Anti-overlay: on s’assure que les liens restent cliquables --- */
+.site-header, .nav, .nav a, main, .grid, .card, .card a, footer { position:relative; z-index:2; }
+.hero::before { pointer-events:none; }
+a { pointer-events:auto; }
 
 /* ================================
    HEADER
@@ -258,3 +261,4 @@ input,select{
   .product-view{grid-template-columns:1fr}
   .site-footer .cols{grid-template-columns:1fr}
 }
+
