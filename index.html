@@ -5,190 +5,70 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>French Connect — CBD de qualité</title>
-<meta name="description" content="French Connect — Fleurs françaises, pack CBD, les Zedous, rosin CBD. Ici, on ne vend que du CBD de qualité." />
 <style>
-:root{
---bg:#0f0f0f;
---panel:#3a2f2a; /* brun profond */
---accent:#f2c072; /* beige/orangé */
---accent-2:#ffe3b4; /* plus clair pour contraste */
---text:#fff9f0;
---radius:22px;
---shadow:0 20px 40px rgba(0,0,0,.35);
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-color: #2b221f;
+color: #f7f2e7;
+text-align: center;
 }
-
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-background:
-radial-gradient(1200px 600px at 10% -10%, #2c211d 20%, transparent 60%),
-radial-gradient(1000px 600px at 110% 10%, #2a201c 15%, transparent 60%),
-var(--bg);
-color:var(--text);
-line-height:1.2;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100svh;
-padding:24px;
+header {
+background-color: #f2c072;
+color: #2b221f;
+padding: 20px;
+font-size: 2.2em;
+font-weight: bold;
+letter-spacing: 1px;
 }
-
-.card{
-width:min(720px, 100%);
-background:var(--panel);
-border-radius:calc(var(--radius) + 10px);
-box-shadow:var(--shadow);
-border:4px solid var(--accent);
-padding:14px;
-position:relative;
+main {
+padding: 30px 20px;
 }
-
-.inner{
-background:var(--panel);
-border-radius:var(--radius);
-border:3px solid var(--accent);
-overflow:hidden;
+.menu {
+display: grid;
+gap: 20px;
+max-width: 400px;
+margin: 40px auto;
 }
-
-header{
-position:relative;
-padding:28px 22px 10px;
-text-align:left;
+a.btn {
+display: block;
+background: #3a2f2a;
+border: 3px solid #f2c072;
+border-radius: 14px;
+padding: 18px;
+text-decoration: none;
+color: #f2c072;
+font-weight: bold;
+text-transform: uppercase;
+transition: background 0.3s, color 0.3s;
 }
-
-.brand{
-display:flex;
-align-items:center;
-gap:10px;
-color:var(--accent);
-font-weight:900;
-letter-spacing:.04em;
-text-transform:uppercase;
-font-size: clamp(36px, 9vw, 64px);
+a.btn:hover {
+background: #f2c072;
+color: #3a2f2a;
 }
-.brand .dot{
-font-size: .55em;
-align-self:flex-start;
-padding-top:.35em;
+footer {
+margin-top: 50px;
+font-size: 0.9em;
+color: #f7f2e7;
 }
-
-.close{
-position:absolute;
-top:16px;
-right:16px;
-width:28px;height:28px;
-border-radius:50%;
-border:2px solid var(--accent);
-color:var(--accent);
-display:grid;place-items:center;
-font-weight:700;
-opacity:.8
-}
-
-.menu{
-display:grid;
-gap:14px;
-padding:22px;
-}
-.btn{
-background:var(--panel);
-border:3px solid var(--accent);
-border-radius:18px;
-padding:18px 18px;
-text-align:center;
-font-weight:900;
-font-size: clamp(18px, 4.6vw, 34px);
-color:var(--accent);
-text-transform:uppercase;
-letter-spacing:.04em;
-}
-
-.divider{
-height:14px;
-background:var(--accent);
-width:100%;
-}
-
-.claim{
-background:var(--panel);
-border-top:3px solid var(--accent);
-border-bottom:3px solid var(--accent);
-padding:20px;
-text-align:center;
-font-size: clamp(14px, 3.2vw, 22px);
-font-weight:800;
-line-height:1.25;
-}
-.claim strong{color:var(--accent-2)}
-
-footer{
-padding:12px 18px 20px;
-}
-.social{
-display:flex;
-flex-wrap:wrap;
-gap:10px 14px;
-align-items:center;
-justify-content:center;
-margin-top:10px;
-}
-.social a{
-display:inline-flex;align-items:center;justify-content:center;
-width:44px;height:44px;border-radius:12px;
-border:2px solid var(--accent); color:var(--accent);
-text-decoration:none; font-size:22px; font-weight:700;
-}
-.footer-title{
-text-align:center;
-color:var(--accent);
-text-transform:uppercase;
-font-weight:900;
-letter-spacing:.06em;
-font-size: clamp(14px, 3.2vw, 18px);
-}
-
-/* small helpers */
-.sr{position:absolute;left:-9999px}
 </style>
 </head>
 <body>
-<main class="card" role="main" aria-labelledby="title">
-<div class="inner">
-<header>
-<div id="title" class="brand" aria-label="French Connect">
-<span>FRENCH&nbsp;CONNECT</span><span class="dot">.io</span>
-</div>
-<div class="close" aria-hidden="true">×</div>
-</header>
-
-<section class="menu" aria-label="Navigation principale">
-<div class="btn">Fleurs françaises !!!</div>
-<div class="btn">Pack CBD</div>
-<div class="btn">Les Puffs</div>
-<div class="btn">Rosin CBD</div>
-</section>
-
-<div class="divider" aria-hidden="true"></div>
-
-<section class="claim" aria-label="Slogan">
-<p><strong>La paille, c’est pour les moutons ou les chèvres.</strong><br>
+<header>FRENCH CONNECT</header>
+<main>
+<h2>Fleurs françaises, CBD et qualité premium 🌿</h2>
+<p>La paille, c’est pour les moutons ou les chèvres.<br>
 Ici, on ne vend que du CBD de qualité.</p>
-</section>
 
-<footer>
-<div class="footer-title">Rejoins-nous sur les réseaux</div>
-<nav class="social" aria-label="Réseaux sociaux">
-<!-- Remplace les # par tes liens -->
-<a href="https://t.me/+6Ws3QLoZdpMxYmI0" aria-label="TikTok">t</a>
-<a href="https://t.me/+6Ws3QLoZdpMxYmI0" aria-label="YouTube">▶︎</a>
-<a href="https://t.me/+6Ws3QLoZdpMxYmI0" aria-label="Facebook">f</a>
-<a href="https://t.me/+6Ws3QLoZdpMxYmI0" aria-label="Instagram">◎</a>
-<a href="https://t.me/+6Ws3QLoZdpMxYmI0" aria-label="X / Twitter">x</a>
-</nav>
-</footer>
+<div class="menu">
+<a class="btn" href="fleurs.html">Fleurs Française</a>
+<a class="btn" href="pack.html">Pack CBD</a>
+<a class="btn" href="zedous.html">Les Zedous</a>
+<a class="btn" href="rosin.html">Rosin CBD</a>
 </div>
 </main>
+<footer>
+© 2025 French Connect — CBD de qualité
+</footer>
 </body>
 </html>
