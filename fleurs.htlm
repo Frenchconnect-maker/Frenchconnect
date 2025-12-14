@@ -1,24 +1,53 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Fleurs Française — French Connect</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market — Fleurs Française | French Connect 31</title>
 <style>
-body {background:#2b221f;color:#f7f2e7;font-family:Arial,sans-serif;text-align:center;margin:0;padding:0;}
-header {background:#f2c072;color:#2b221f;padding:20px;font-weight:bold;}
-main {padding:40px 20px;}
-a {color:#f2c072;text-decoration:none;}
-a:hover{text-decoration:underline;}
+:root{--bg:#223a4d;--panel:#2f2622;--accent:#f2c072;--text:#fff9f0;--radius:16px}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,system-ui}
+header,footer{max-width:1100px;margin:0 auto;padding:16px}
+a.home{color:var(--accent);text-decoration:none;font-weight:700}
+.title{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.grid{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--panel);border:2px solid var(--accent);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.ph{aspect-ratio:4/3;background:#503f38;border-radius:12px}
+.name{font-weight:800}
+.price{opacity:.9}
+.buy{margin-top:auto;display:inline-block;text-align:center;background:var(--accent);color:var(--panel);font-weight:900;text-decoration:none;border-radius:10px;padding:10px}
+.buy:hover{filter:brightness(1.05)}
 </style>
 </head>
 <body>
-<header>🌿 Fleurs Française</header>
-<main>
-<h2>Nos fleurs 100% françaises</h2>
-<p>Découvrez notre sélection de fleurs de CBD cultivées en France, sans pesticides ni additifs.
-Des arômes authentiques, une qualité premium et une traçabilité garantie.</p>
-<p><a href="index.html">← Retour à l’accueil</a></p>
-</main>
+<header class="title">
+<h1>🌿 Fleurs Française — Market</h1>
+<a class="home" href="index.html">← Accueil</a>
+</header>
+
+<section class="grid">
+<!-- Exemples : duplique une carte par produit -->
+<article class="card">
+<div class="ph" aria-hidden="true"></div>
+<div class="name">Amnesia • 2g</div>
+<div class="price">12,90 €</div>
+<a class="buy" href="#">Ajouter au panier</a>
+</article>
+
+<article class="card">
+<div class="ph"></div>
+<div class="name">OG Kush • 3.5g</div>
+<div class="price">19,90 €</div>
+<a class="buy" href="#">Ajouter au panier</a>
+</article>
+
+<article class="card">
+<div class="ph"></div>
+<div class="name">Strawberry • 1g</div>
+<div class="price">6,50 €</div>
+<a class="buy" href="#">Ajouter au panier</a>
+</article>
+</section>
+
+<footer>© 2025 French Connect 31</footer>
 </body>
 </html>
