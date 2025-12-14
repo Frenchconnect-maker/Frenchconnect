@@ -30,14 +30,15 @@ const STORE = [
     desc: "Huile CBD 10% avec spectre complet. Usage cosmétique. THC < 0,3 %.",
     payment_link: ""
   },
+  // ====== Exemple produit avec options ======
   {
     id: "frenchconnect-smellz-bananacake-cakeberry-rosin",
     name: "FrenchConnect x Smellz – Bananacake / Cakeberry Rosin CBD",
-    price: 40.00,
+    price: 40.00, // prix d'affichage "à partir de"
     image: "assets/images/cakeberry-rosin.jpg",
     category: "extraits",
     badge: "Rosin Ultra Premium",
-    desc: "Issu de la collaboration exclusive FrenchConnect x Smellz, ce Rosin CBD Bananacake / Cakeberry est un coup de cœur 2025. Extraction sans solvants, terpènes naturels, série limitée. THC < 0,3 %.",
+    desc: "Collab FrenchConnect x Smellz. Rosin artisanal, terpènes naturels. Série limitée. THC < 0,3 %.",
     options: [
       { id: "0_5g", label: "0,5 g", price: 20.00, payment_link: "" },
       { id: "1g",   label: "1 g",   price: 40.00, payment_link: "" },
@@ -48,37 +49,68 @@ const STORE = [
 ];
 
 // ====== HELPERS ======
-const formatPrice = (n) => n.toFixed(2).replace('.', ',') + ' €';
-const getOption = (p, optId) => (p.options || []).find(o => o.id === optId);
+const formatPrice = (n) => n.toFixed(2).replace(".", ",") + " €";
+const getOption   = (p, optId) => (p.options || []).find(o => o.id === optId);
 const defaultOptionId = (p) => (p.options && p.options[0]?.id) || null;
 const priceFor = (p, optId) => (getOption(p, optId)?.price ?? p.price);
 
-// ====== PANIER ======
-function getCart(){ try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e){ return []; } }
-function setCart(cart){ localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
+// Panier localStorage
+function getCart(){ try { return JSON.parse(localStorage.getItem("cart") || "[]"); } catch(e){ return []; } }
+function setCart(cart){ localStorage.setItem("cart", JSON.stringify(cart)); updateCartCount(); }
 function updateCartCount(){
   const cart = getCart();
   const count = cart.reduce((s,l)=>s+l.qty,0);
-  const el = document.getElementById('cart-count');
+  const el = document.getElementById("cart-count");
   if(el) el.textContent = count;
 }
 function findProduct(id){ return STORE.find(p => p.id === id); }
+
+// ====== CATEGORIES (normalisation + alias) ======
+const CATEGORY_MAP = {
+  "fleurs": "fleurs",
+  "fleur": "fleurs",
+  "resines": "resines",
+  "résines": "resines",
+  "resine": "resines",
+  "huiles": "huiles",
+  "huile": "huiles",
+  "extraits": "extraits",
+  "extracts": "extraits",
+  "rosin": "extraits" // rosin = sous-famille d'extraits
+};
+function normCat(c){
+  if(!c) return "";
+  const k = (""+c).toLowerCase().trim();
+  return CATEGORY_MAP[k] || k;
+}
+
+// Recherche + filtre catégorie (y compris rosin)
 function searchProducts(q, cat){
-  q=(q||'').toLowerCase();
-  return STORE.filter(p =>
-    (!q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) &&
-    (!cat || p.category===cat)
-  );
+  q = (q||"").toLowerCase();
+  const want = normCat(cat);
+
+  return STORE.filter(p => {
+    const okQ = !q || (p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
+
+    const pCat = normCat(p.category);
+    let okC = !want || pCat === want;
+
+    // Si on demande rosin (via URL ?cat=rosin), on filtre extraits + badge Rosin
+    if(want === "extraits" && (cat||"").toLowerCase().includes("rosin")){
+      okC = pCat === "extraits" && /rosin/i.test(p.badge || "");
+    }
+    return okQ && okC;
+  });
 }
 
 // ====== HOME ======
 function renderHome(){
-  const box=document.getElementById('home-collection');
+  const box = document.getElementById("home-collection");
   if(!box) return;
-  box.innerHTML = STORE.slice(0,3).map(card).join('');
+  box.innerHTML = STORE.slice(0,3).map(card).join("");
 }
 
-// ====== CARTES PRODUITS (liens absolus + lazy-load) ======
+// ====== CARTES PRODUITS (liens absolus + lazy) ======
 function card(p){
   const base = p.options?.length ? p.options[0].price : p.price;
   return `
@@ -99,112 +131,164 @@ function card(p){
 
 // ====== PANIER ======
 function addToCart(id, qty, optId){
-  const p=findProduct(id); if(!p) return;
+  const p = findProduct(id); if(!p) return;
   const optionId = optId || defaultOptionId(p);
   const key = optionId ? `${id}__${optionId}` : id;
-  const cart=getCart();
-  const line=cart.find(l=>l.key===key);
-  if(line) line.qty+=qty; else cart.push({ key, id, optionId, qty });
+  const cart = getCart();
+  const line = cart.find(l => l.key === key);
+  if(line) line.qty += qty; else cart.push({ key, id, optionId, qty });
   setCart(cart);
-  alert('Ajouté au panier ✔');
+  alert("Ajouté au panier ✔");
 }
 function removeFromCart(key){
-  const cart=getCart().filter(l=>l.key!==key);
+  const cart = getCart().filter(l => l.key !== key);
   setCart(cart); renderCart();
 }
 function setQty(key, qty){
-  const cart=getCart();
-  const line=cart.find(l=>l.key===key);
+  const cart = getCart();
+  const line = cart.find(l => l.key === key);
   if(!line) return;
-  line.qty=Math.max(1, qty|0);
+  line.qty = Math.max(1, qty|0);
   setCart(cart); renderCart();
 }
 function renderCart(){
-  const box=document.getElementById('cart-items'); if(!box) return;
-  const cart=getCart();
-  if(cart.length===0){
-    box.innerHTML='<p>Votre panier est vide.</p>';
-    const t=document.getElementById('cart-total'); if(t) t.textContent=formatPrice(0);
+  const box = document.getElementById("cart-items");
+  if(!box) return;
+  const cart = getCart();
+  if(cart.length === 0){
+    box.innerHTML = "<p>Votre panier est vide.</p>";
+    const t = document.getElementById("cart-total"); if(t) t.textContent = formatPrice(0);
     return;
   }
-  let total=0;
-  box.innerHTML = cart.map(l=>{
-    const p=findProduct(l.id);
-    const price=priceFor(p,l.optionId);
-    total+=price*l.qty;
-    const optLabel=l.optionId ? (getOption(p,l.optionId)?.label||'') : '';
+  let total = 0;
+  box.innerHTML = cart.map(l => {
+    const p = findProduct(l.id);
+    const price = priceFor(p, l.optionId);
+    total += price * l.qty;
+    const optLabel = l.optionId ? (getOption(p, l.optionId)?.label || "") : "";
     return `
       <div class="cart-line">
         <img src="${p.image}" alt="${p.name}">
         <div>
           <strong>${p.name}</strong>
-          <div class="muted">${p.category} • ${p.badge}${optLabel?' • '+optLabel:''}</div>
+          <div class="muted">${p.category} • ${p.badge}${optLabel ? " • " + optLabel : ""}</div>
         </div>
         <div>${formatPrice(price)}</div>
-        <div><input type="number" min="1" value="${l.qty}" onchange="setQty('${l.key}',this.value)"></div>
+        <div><input type="number" min="1" value="${l.qty}" onchange="setQty('${l.key}', this.value)"></div>
         <div><button class="btn ghost" onclick="removeFromCart('${l.key}')">Retirer</button></div>
       </div>`;
-  }).join('');
-  const t=document.getElementById('cart-total'); if(t) t.textContent=formatPrice(total);
+  }).join("");
+  const t = document.getElementById("cart-total"); if(t) t.textContent = formatPrice(total);
+  const btn = document.getElementById("checkout-btn");
+  if(btn){
+    btn.onclick = function(e){
+      e.preventDefault();
+      startCheckout();
+    };
+  }
 }
 
 // ====== CHECKOUT ======
 function startCheckout(){
-  const cart=getCart();
-  if(cart.length===1){
-    const {id,qty,optionId}=cart[0];
-    const p=findProduct(id);
-    const opt=optionId?getOption(p,optionId):null;
-    const link=(opt&&opt.payment_link)||p.payment_link;
-    if(link && link.startsWith('http')){
-      window.location.href = link + (qty>1?('?quantity='+qty):'');
-      return;
+  const cart = getCart();
+  if(cart.length === 1){
+    const { id, qty, optionId } = cart[0];
+    const p = findProduct(id);
+    const opt  = optionId ? getOption(p, optionId) : null;
+    const link = (opt && opt.payment_link) || p.payment_link;
+    if(link && link.startsWith("http")){
+      const url = link + (qty>1 ? ("?quantity=" + qty) : "");
+      window.location.href = url; return;
     }
   }
-  alert('Pour un vrai checkout multi-produit, raccorde Stripe.');
+  alert("Pour un vrai checkout multi-produit, raccorde Stripe.");
 }
 
 // ====== PAGE PRODUIT ======
 function bootProductPage(){
-  const url=new URL(location.href);
-  const id=url.searchParams.get('id');
-  const p=findProduct(id)||STORE[0];
+  const url = new URL(location.href);
+  const id  = url.searchParams.get("id");
+  const p = findProduct(id) || STORE[0];
 
-  document.getElementById('p-image').src=p.image;
-  document.getElementById('p-name').textContent=p.name;
-  document.getElementById('p-desc').textContent=p.desc;
-  document.getElementById('p-cat').textContent=p.category;
-  document.getElementById('p-badge').textContent=p.badge;
+  document.getElementById("p-image").src = p.image;
+  document.getElementById("p-name").textContent = p.name;
+  document.getElementById("p-desc").textContent = p.desc;
+  document.getElementById("p-cat").textContent = p.category;
+  document.getElementById("p-badge").textContent = p.badge;
 
-  const optSelect=document.getElementById('option');
-  let currentOpt=defaultOptionId(p);
+  const optSelect = document.getElementById("option");
+  let currentOpt = defaultOptionId(p);
   if(p.options && optSelect){
-    optSelect.innerHTML=p.options.map(o=>`<option value="${o.id}">${o.label} — ${formatPrice(o.price)}</option>`).join('');
-    optSelect.value=currentOpt;
-    optSelect.onchange=()=>document.getElementById('p-price').textContent=formatPrice(priceFor(p, optSelect.value));
+    optSelect.innerHTML = p.options
+      .map(o => `<option value="${o.id}">${o.label} — ${formatPrice(o.price)}</option>`)
+      .join("");
+    optSelect.value = currentOpt;
+    optSelect.onchange = () => {
+      currentOpt = optSelect.value;
+      document.getElementById("p-price").textContent = formatPrice(priceFor(p, currentOpt));
+    };
   }
-  document.getElementById('p-price').textContent=formatPrice(priceFor(p,currentOpt));
+  document.getElementById("p-price").textContent = formatPrice(priceFor(p, currentOpt));
 
-  document.getElementById('add-to-cart').onclick=()=>{
-    const qty=parseInt(document.getElementById('qty').value||'1',10);
-    addToCart(p.id,qty,optSelect?optSelect.value:null);
+  document.getElementById("add-to-cart").onclick = () => {
+    const qty = parseInt(document.getElementById("qty").value || "1", 10);
+    addToCart(p.id, qty, currentOpt);
+  };
+  document.getElementById("buy-now").onclick = () => {
+    const opt  = currentOpt ? getOption(p, currentOpt) : null;
+    const link = (opt && opt.payment_link) || p.payment_link;
+    if(link && link.startsWith("http")){
+      const qty = parseInt(document.getElementById("qty").value || "1", 10);
+      const url = link + (qty>1 ? ("?quantity=" + qty) : "");
+      location.href = url;
+    } else {
+      alert("Ajoute un lien Stripe (sur l’option ou le produit) pour activer \"Acheter maintenant\".");
+    }
   };
 }
 
 // ====== PAGE BOUTIQUE ======
 function bootShopPage(){
-  const grid=document.getElementById('product-grid'); if(!grid) return;
-  const input=document.getElementById('search');
-  const select=document.getElementById('category-filter');
-  const rerender=()=>grid.innerHTML=searchProducts(input.value,select.value).map(card).join('');
-  input.oninput=rerender; select.onchange=rerender; rerender();
+  const grid  = document.getElementById("product-grid");
+  if(!grid) return;
+
+  const input = document.getElementById("search");
+  const select= document.getElementById("category-filter");
+
+  // Lecture du paramètre d'URL ?cat=
+  const url   = new URL(location.href);
+  const urlCatRaw = (url.searchParams.get("cat") || "").toLowerCase();
+  const possible = ["", "fleurs", "resines", "huiles", "extraits", "rosin"];
+  if(possible.includes(urlCatRaw)){
+    // si rosin -> on met "extraits" dans le select (cohérence UI)
+    select.value = (urlCatRaw === "rosin") ? "extraits" : urlCatRaw;
+  }
+
+  function rerender(){
+    // conserve le filtre "rosin" si l'URL le demandait
+    const catParam = (urlCatRaw === "rosin") ? "rosin" : select.value;
+    const results = searchProducts(input.value, catParam);
+    grid.innerHTML = results.map(card).join("");
+  }
+
+  input.oninput   = rerender;
+  select.onchange = () => {
+    // si on change depuis une URL rosin, on nettoie l'URL
+    if(select.value !== "extraits" && urlCatRaw === "rosin"){
+      const clean = location.pathname.replace(/\/+$/, "") + "?" + new URLSearchParams().toString();
+      history.replaceState({}, "", clean);
+    }
+    rerender();
+  };
+
+  rerender();
 }
 
 // ====== INIT ======
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   renderHome();
   bootShopPage();
   renderCart();
-  if(document.getElementById('product-page')) bootProductPage();
+  if(document.getElementById("product-page")) bootProductPage();
 });
