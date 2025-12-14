@@ -78,13 +78,13 @@ function renderHome(){
   box.innerHTML = STORE.slice(0,3).map(card).join('');
 }
 
-// ====== CARTES PRODUITS (LIENS ABSOLUS) ======
+// ====== CARTES PRODUITS (liens absolus + lazy-load) ======
 function card(p){
   const base = p.options?.length ? p.options[0].price : p.price;
   return `
   <article class="card">
     <a href="/frenchconnect/product.html?id=${p.id}">
-      <img class="thumb" src="${p.image}" alt="${p.name}">
+      <img class="thumb" src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
     </a>
     <div class="pad">
       <div class="pill">${p.category}</div>
