@@ -42,6 +42,17 @@ const STORE = [
     desc: "Huile CBD 10% avec spectre complet. Usage cosmétique. THC < 0,3%.",
     payment_link: "https://buy.stripe.com/test_ZZZZZ"
   }
+  {
+  id: "cakeberry",
+  name: "Huile CBD 20%",
+  price: 39.90,
+  image: "assets/images/huile20.jpg",
+  category: "huiles",
+  badge: "Full spectrum",
+  desc: "Huile CBD 20% – spectre complet – THC < 0,3%",
+  payment_link: "https://buy.stripe.com/TON_LIEN_STRIPE"
+},
+
 ];
 
 const formatPrice = (n) => (n).toFixed(2).replace('.', ',') + ' €';
