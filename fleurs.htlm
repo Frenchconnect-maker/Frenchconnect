@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fleurs Française — French Connect</title>
+<style>
+body {background:#2b221f;color:#f7f2e7;font-family:Arial,sans-serif;text-align:center;margin:0;padding:0;}
+header {background:#f2c072;color:#2b221f;padding:20px;font-weight:bold;}
+main {padding:40px 20px;}
+a {color:#f2c072;text-decoration:none;}
+a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<header>🌿 Fleurs Française</header>
+<main>
+<h2>Nos fleurs 100% françaises</h2>
+<p>Découvrez notre sélection de fleurs de CBD cultivées en France, sans pesticides ni additifs.
+Des arômes authentiques, une qualité premium et une traçabilité garantie.</p>
+<p><a href="index.html">← Retour à l’accueil</a></p>
+</main>
+</body>
+</html>
