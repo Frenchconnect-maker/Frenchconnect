@@ -1,5 +1,6 @@
 // ====== CATALOGUE PRODUITS (avec options de grammage) ======
 const STORE = [
+  // === EXEMPLES EXISTANTS ===
   {
     id: "flr-french31",
     name: "French Connect 31 - Fleurs CBD",
@@ -30,11 +31,12 @@ const STORE = [
     desc: "Huile CBD 10% avec spectre complet. Usage cosmétique. THC < 0,3 %.",
     payment_link: ""
   },
-  // ====== Exemple produit avec options ======
+
+  // === EXEMPLE ROSIN AVEC OPTIONS ===
   {
     id: "frenchconnect-smellz-bananacake-cakeberry-rosin",
     name: "FrenchConnect x Smellz – Bananacake / Cakeberry Rosin CBD",
-    price: 40.00, // prix d'affichage "à partir de"
+    price: 40.00, // affichage "à partir de"
     image: "assets/images/cakeberry-rosin.jpg",
     category: "extraits",
     badge: "Rosin Ultra Premium",
@@ -43,6 +45,83 @@ const STORE = [
       { id: "0_5g", label: "0,5 g", price: 20.00, payment_link: "" },
       { id: "1g",   label: "1 g",   price: 40.00, payment_link: "" },
       { id: "2g",   label: "2 g",   price: 80.00, payment_link: "" }
+    ],
+    payment_link: ""
+  },
+
+  // ====== HASH • RÉSINES CBD ======
+  {
+    id: "hash-lemon-ice",
+    name: "Hash Lemon Ice – Résine CBD",
+    price: 12.00,
+    image: "assets/images/hash-lemon-ice.webp",
+    category: "resines",
+    badge: "Ice-o-lator",
+    desc: "Profil citronné vif, extraction ice-o-lator pour une texture propre et aromatique. Série limitée. THC < 0,3 %.",
+    options: [
+      { id: "1g",  label: "1 g",  price: 12.00, payment_link: "" },
+      { id: "5g",  label: "5 g",  price: 55.00, payment_link: "" },
+      { id: "10g", label: "10 g", price: 100.00, payment_link: "" }
+    ],
+    payment_link: ""
+  },
+  {
+    id: "hash-royal-gold",
+    name: "Hash Royal Gold – Résine CBD",
+    price: 14.00,
+    image: "assets/images/hash-royal-gold.webp",
+    category: "resines",
+    badge: "Premium",
+    desc: "Texture onctueuse, nez épicé & floral, finition propre. Conformité UE, THC < 0,3 %.",
+    options: [
+      { id: "1g",  label: "1 g",  price: 14.00, payment_link: "" },
+      { id: "5g",  label: "5 g",  price: 65.00, payment_link: "" },
+      { id: "10g", label: "10 g", price: 120.00, payment_link: "" }
+    ],
+    payment_link: ""
+  },
+  {
+    id: "hash-caramel-cream",
+    name: "Hash Caramel Cream – Résine CBD",
+    price: 13.00,
+    image: "assets/images/hash-caramel-cream.webp",
+    category: "resines",
+    badge: "Old-school",
+    desc: "Profil gourmand (caramel/boisé), texture malléable. Parfait pour un usage aromatique. THC < 0,3 %.",
+    options: [
+      { id: "1g",  label: "1 g",  price: 13.00, payment_link: "" },
+      { id: "5g",  label: "5 g",  price: 60.00, payment_link: "" },
+      { id: "10g", label: "10 g", price: 110.00, payment_link: "" }
+    ],
+    payment_link: ""
+  },
+  {
+    id: "hash-amnesia",
+    name: "Hash Amnesia – Résine CBD",
+    price: 11.00,
+    image: "assets/images/hash-amnesia.webp",
+    category: "resines",
+    badge: "Dry sift",
+    desc: "Dry sift CBD au nez Amnesia (citron/herbes), tamisage soigné & pressage maîtrisé. THC < 0,3 %.",
+    options: [
+      { id: "1g",  label: "1 g",  price: 11.00, payment_link: "" },
+      { id: "5g",  label: "5 g",  price: 52.00, payment_link: "" },
+      { id: "10g", label: "10 g", price: 95.00,  payment_link: "" }
+    ],
+    payment_link: ""
+  },
+  {
+    id: "hash-ice90-luxury",
+    name: "Hash Ice-o-lator 90µ – Luxury",
+    price: 18.00,
+    image: "assets/images/hash-ice90-luxury.webp",
+    category: "resines",
+    badge: "Ice-o-lator 90µ",
+    desc: "Microplan 90 microns, texture fondante, nez résineux & floral. Sélection luxe. THC < 0,3 %.",
+    options: [
+      { id: "1g",  label: "1 g",  price: 18.00, payment_link: "" },
+      { id: "5g",  label: "5 g",  price: 85.00, payment_link: "" },
+      { id: "10g", label: "10 g", price: 160.00, payment_link: "" }
     ],
     payment_link: ""
   }
@@ -72,11 +151,12 @@ const CATEGORY_MAP = {
   "resines": "resines",
   "résines": "resines",
   "resine": "resines",
+  "hash": "resines",      // ✅ alias hash
   "huiles": "huiles",
   "huile": "huiles",
   "extraits": "extraits",
   "extracts": "extraits",
-  "rosin": "extraits" // rosin = sous-famille d'extraits
+  "rosin": "extraits"     // rosin = sous-famille d'extraits
 };
 function normCat(c){
   if(!c) return "";
@@ -84,18 +164,17 @@ function normCat(c){
   return CATEGORY_MAP[k] || k;
 }
 
-// Recherche + filtre catégorie (y compris rosin)
+// Recherche + filtre catégorie (inclut rosin)
 function searchProducts(q, cat){
   q = (q||"").toLowerCase();
   const want = normCat(cat);
 
   return STORE.filter(p => {
     const okQ = !q || (p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-
     const pCat = normCat(p.category);
     let okC = !want || pCat === want;
 
-    // Si on demande rosin (via URL ?cat=rosin), on filtre extraits + badge Rosin
+    // si on demande rosin (?cat=rosin) -> extraits + badge rosin
     if(want === "extraits" && (cat||"").toLowerCase().includes("rosin")){
       okC = pCat === "extraits" && /rosin/i.test(p.badge || "");
     }
@@ -258,23 +337,24 @@ function bootShopPage(){
   // Lecture du paramètre d'URL ?cat=
   const url   = new URL(location.href);
   const urlCatRaw = (url.searchParams.get("cat") || "").toLowerCase();
-  const possible = ["", "fleurs", "resines", "huiles", "extraits", "rosin"];
+  const possible = ["", "fleurs", "resines", "huiles", "extraits", "rosin", "hash"];
   if(possible.includes(urlCatRaw)){
     // si rosin -> on met "extraits" dans le select (cohérence UI)
-    select.value = (urlCatRaw === "rosin") ? "extraits" : urlCatRaw;
+    // si hash  -> on met "resines" (alias)
+    select.value = (urlCatRaw === "rosin") ? "extraits" : (urlCatRaw === "hash" ? "resines" : urlCatRaw);
   }
 
   function rerender(){
-    // conserve le filtre "rosin" si l'URL le demandait
-    const catParam = (urlCatRaw === "rosin") ? "rosin" : select.value;
+    // conserve le filtre "rosin" ou "hash" si demandé en URL
+    const catParam = (urlCatRaw === "rosin") ? "rosin" : (urlCatRaw === "hash" ? "hash" : select.value);
     const results = searchProducts(input.value, catParam);
     grid.innerHTML = results.map(card).join("");
   }
 
   input.oninput   = rerender;
   select.onchange = () => {
-    // si on change depuis une URL rosin, on nettoie l'URL
-    if(select.value !== "extraits" && urlCatRaw === "rosin"){
+    // si on change depuis une URL rosin/hash, on nettoie l'URL
+    if((urlCatRaw === "rosin" || urlCatRaw === "hash") && select.value !== "extraits" && select.value !== "resines"){
       const clean = location.pathname.replace(/\/+$/, "") + "?" + new URLSearchParams().toString();
       history.replaceState({}, "", clean);
     }
