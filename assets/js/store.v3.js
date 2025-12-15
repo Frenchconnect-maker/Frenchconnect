@@ -1,3 +1,6 @@
+// =======================
+// CATALOGUE PRODUITS
+// =======================
 const STORE = [
   {
     id: "flower-gelato",
@@ -28,33 +31,47 @@ const STORE = [
   }
 ];
 
-// ========================
-const formatPrice = p => p.toFixed(2).replace(".", ",") + " €";
+// =======================
+// HELPERS
+// =======================
+const formatPrice = n => n.toFixed(2).replace(".", ",") + " €";
 
+// =======================
+// BOUTIQUE
+// =======================
 function renderShop(){
   const grid = document.getElementById("product-grid");
   if(!grid) return;
 
-  grid.innerHTML = STORE.map(p => `
-    <article class="card">
-      <img class="thumb" src="${p.image}">
-      <div class="pad">
-        <span class="pill">${p.badge}</span>
-        <h3>${p.name}</h3>
-        <p class="muted">${p.desc}</p>
+  grid.innerHTML = STORE.map(p => {
+    const basePrice = p.options[0].price;
 
-        <select>
-          ${p.options.map(o => `
-            <option>${o.label} — ${formatPrice(o.price)}</option>
-          `).join("")}
-        </select>
+    return `
+      <article class="card">
+        <a href="product.html?id=${p.id}">
+          <img class="thumb" src="${p.image}" alt="${p.name}">
+        </a>
 
-        <div class="price-tag">
-          À partir de ${formatPrice(p.options[0].price)}
+        <div class="pad">
+          <span class="pill">${p.badge}</span>
+          <h3>${p.name}</h3>
+          <p class="muted">${p.desc}</p>
+
+          <div class="price-tag">
+            À partir de ${formatPrice(basePrice)}
+          </div>
+
+          <div class="btn-row">
+            <a class="btn" href="product.html?id=${p.id}">
+              Choisir le grammage
+            </a>
+          </div>
         </div>
-      </div>
-    </article>
-  `).join("");
+      </article>
+    `;
+  }).join("");
 }
 
+// =======================
 document.addEventListener("DOMContentLoaded", renderShop);
+
